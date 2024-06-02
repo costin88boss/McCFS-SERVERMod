@@ -141,7 +141,7 @@ jar {
 
     from {
         configurations.runtimeClasspath.collect {
-            if (!stuff.contains(it.name)) return it
+            if (!stuff.contains(it.name)) return null
             print(it.name + "\n")
             it.isDirectory() ? it : zipTree(it)
         }
