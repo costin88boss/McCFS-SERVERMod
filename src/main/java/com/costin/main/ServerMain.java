@@ -83,17 +83,19 @@ public class ServerMain implements ModInitializer {
             File backupDir = new File(serverDir + Utils.BACKUP_FOLDER);
             boolean deletedSmth = false;
 
-            File[] backups = backupDir.listFiles();
-            for (File backup : backups) {
-                String name = backup.getName();
-                Date date = formatter.parse(name);
+            if(backupDir.exists()) {
+                File[] backups = backupDir.listFiles();
+                for (File backup : backups) {
+                    String name = backup.getName();
+                    Date date = formatter.parse(name);
 
-                long diffS = Date.from(LocalDateTime.now().toInstant(ZoneOffset.UTC)).getTime() - date.getTime();
-                int diffH = Math.round(diffS / 1000f / 60f / 60f);
-                if (diffH > Utils.BACKUP_OLDEST_MAX_TIME_HOURS) {
-                    DiscordBot.instance().sendMcLog(McLogType.BACKUP_LOG, "Deleting backup: %s".formatted(name));
-                    backup.delete();
-                    deletedSmth = true;
+                    long diffS = Date.from(LocalDateTime.now().toInstant(ZoneOffset.UTC)).getTime() - date.getTime();
+                    int diffH = Math.round(diffS / 1000f / 60f / 60f);
+                    if (diffH > Utils.BACKUP_OLDEST_MAX_TIME_HOURS) {
+                        DiscordBot.instance().sendMcLog(McLogType.BACKUP_LOG, "Deleting backup: %s".formatted(name));
+                        backup.delete();
+                        deletedSmth = true;
+                    }
                 }
             }
             if (!deletedSmth) {
