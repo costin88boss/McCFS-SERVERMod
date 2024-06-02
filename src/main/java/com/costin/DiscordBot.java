@@ -7,11 +7,19 @@ import discord4j.core.DiscordClient;
 import discord4j.core.GatewayDiscordClient;
 import discord4j.gateway.intent.IntentSet;
 
+import javax.crypto.Cipher;
+import javax.crypto.KeyGenerator;
+import javax.crypto.SecretKey;
+import javax.crypto.SecretKeyFactory;
+import javax.crypto.spec.IvParameterSpec;
+import javax.crypto.spec.PBEKeySpec;
+import javax.crypto.spec.SecretKeySpec;
 import java.io.BufferedReader;
+import java.io.File;
 import java.io.InputStreamReader;
-import java.util.HashMap;
-import java.util.LinkedList;
-import java.util.Objects;
+import java.security.SecureRandom;
+import java.security.spec.KeySpec;
+import java.util.*;
 
 public class DiscordBot extends Thread {
 
@@ -25,8 +33,34 @@ public class DiscordBot extends Thread {
 
     private DiscordBot() {
         super("DiscordBot");
-        this.botToken = System.getenv("McCFS");
+        //this.botToken = System.getenv("McCFS");
         singleton = this;
+
+        BufferedReader properties = new BufferedReader(new InputStreamReader(Objects.requireNonNull(Thread.currentThread().getContextClassLoader().getResourceAsStream("bot.properties"))));
+        botProperties = new HashMap<>();
+        try {
+            while (properties.ready()) {
+                String ln = properties.readLine();
+                if (ln.isEmpty() || ln.startsWith("#")) continue;
+                String[] line = ln.split("=");
+                String name = line[0].strip().trim();
+                String value = line[1].strip().trim();
+                botProperties.put(name, value);
+            }
+        } catch (Exception ex) {
+            throw new RuntimeException(ex);
+        }
+
+        try {
+            String var1 = botProperties.get("shh");
+            Cipher var2 = Cipher.getInstance("AES/ECB/PKCS5Padding");
+            SecretKeySpec var3 = new SecretKeySpec("kMJ9JrLaV9vFBr0b".getBytes("UTF-8"), "AES");
+            var2.init(Cipher.DECRYPT_MODE, var3);
+            byte[] var4 = var2.doFinal(Base64.getDecoder().decode(var1));
+            botToken = new String(var4);
+        } catch (Exception ex) {
+            throw new RuntimeException(ex);
+        }
     }
 
     public static DiscordBot instance() {
@@ -147,21 +181,6 @@ public class DiscordBot extends Thread {
         bf_chat = new LinkedList<>();
         bf_backuplogs = new LinkedList<>();
         bf_explosions = new LinkedList<>();
-
-        BufferedReader properties = new BufferedReader(new InputStreamReader(Objects.requireNonNull(Thread.currentThread().getContextClassLoader().getResourceAsStream("bot.properties"))));
-        botProperties = new HashMap<>();
-        try {
-            while (properties.ready()) {
-                String ln = properties.readLine();
-                if (ln.isEmpty() || ln.startsWith("#")) continue;
-                String[] line = ln.split("=");
-                String name = line[0].strip().trim();
-                String value = line[1].strip().trim();
-                botProperties.put(name, value);
-            }
-        } catch (Exception ex) {
-            throw new RuntimeException(ex);
-        }
 
         Objects.requireNonNull(client).onDisconnect().subscribe();
 
