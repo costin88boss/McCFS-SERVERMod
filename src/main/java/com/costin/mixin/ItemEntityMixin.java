@@ -1,10 +1,9 @@
 package com.costin.mixin;
 
-import com.costin.ServerMain;
+import com.costin.main.Utils;
 import net.minecraft.entity.ItemEntity;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.ItemStack;
-import net.minecraft.text.Text;
 import org.jetbrains.annotations.Nullable;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;
@@ -24,14 +23,11 @@ public abstract class ItemEntityMixin {
     @Shadow
     public abstract ItemStack getStack();
 
-    @Shadow
-    public abstract Text getName();
-
     @Inject(method = "onPlayerCollision", at = @At("HEAD"))
     void itemPickup(PlayerEntity player, CallbackInfo ci) {
         ItemStack itemStack = this.getStack();
         if (this.pickupDelay == 0 && (this.owner == null || this.owner.equals(player.getUuid()))) {
-            ServerMain.getEventManager().onItemPickup(itemStack.getName(), itemStack.getCount(), player.getName());
+            Utils.getEventManager().onItemPickup(player.getEntityWorld().getDimensionEntry().getIdAsString().split(":")[1], itemStack.getName(), itemStack.getCount(), player.getName());
         }
     }
 

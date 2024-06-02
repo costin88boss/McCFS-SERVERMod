@@ -1,6 +1,6 @@
 package com.costin.mixin;
 
-import com.costin.ServerMain;
+import com.costin.main.Utils;
 import net.minecraft.network.message.MessageType;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.text.Text;
@@ -8,6 +8,8 @@ import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
+
+import java.util.Objects;
 
 @Mixin(MinecraftServer.class)
 public class ConsoleLogMixin {
@@ -19,8 +21,6 @@ public class ConsoleLogMixin {
     @Inject(method = "logChatMessage", at = @At("HEAD"))
     void logChatMessage(Text message, MessageType.Parameters params, String prefix, CallbackInfo ci) {
         String string = params.applyChatDecoration(message).getString();
-        if (prefix != null)
-            ServerMain.getEventManager().onChatMessage(prefix, string);
-        else ServerMain.getEventManager().onChatMessage("", string);
+        Utils.getEventManager().onChatMessage(Objects.requireNonNullElse(prefix, ""), string);
     }
 }

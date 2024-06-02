@@ -8,36 +8,36 @@
 }*/
 
 plugins {
-	//id 'com.github.johnrengelman.shadow' version '8.1.1'
-	id 'fabric-loom' version '1.6-SNAPSHOT'
-	id 'maven-publish'
+    //id 'com.github.johnrengelman.shadow' version '8.1.1'
+    id 'fabric-loom' version '1.6-SNAPSHOT'
+    id 'maven-publish'
 }
 
 version = project.mod_version
 group = project.maven_group
 
 base {
-	archivesName = project.archives_base_name
+    archivesName = project.archives_base_name
 }
 
 repositories {
-	mavenCentral()
+    mavenCentral()
 }
 
 ext {
-	reactor_bom_version="2020.0.33"
-	jackson_datatype_jsr310_version="2.14.2"
-	discordJsonVersion="1.7.8"
+    reactor_bom_version = "2020.0.33"
+    jackson_datatype_jsr310_version = "2.14.2"
+    discordJsonVersion = "1.7.8"
 }
 
 loom {
     splitEnvironmentSourceSets()
 
-	mods {
-		"custom_mod_namespace_server" {
-			sourceSet sourceSets.main
-		}
-	}
+    mods {
+        "custom_mod_namespace_server" {
+            sourceSet sourceSets.main
+        }
+    }
 
 }
 
@@ -58,112 +58,112 @@ shadowJar {
 }*/
 
 dependencies {
-	// To change the versions see the gradle.properties file
-	minecraft "com.mojang:minecraft:${project.minecraft_version}"
-	mappings "net.fabricmc:yarn:${project.yarn_mappings}:v2"
-	modImplementation "net.fabricmc:fabric-loader:${project.loader_version}"
+    // To change the versions see the gradle.properties file
+    minecraft "com.mojang:minecraft:${project.minecraft_version}"
+    mappings "net.fabricmc:yarn:${project.yarn_mappings}:v2"
+    modImplementation "net.fabricmc:fabric-loader:${project.loader_version}"
 
-	// Fabric API. This is technically optional, but you probably want it anyway.
-	modImplementation "net.fabricmc.fabric-api:fabric-api:${project.fabric_version}"
+    // Fabric API. This is technically optional, but you probably want it anyway.
+    modImplementation "net.fabricmc.fabric-api:fabric-api:${project.fabric_version}"
 
 
-	implementation "com.discord4j:discord4j-core:$discord_bot_version"
+    implementation "com.discord4j:discord4j-core:$discord_bot_version"
 }
 
 processResources {
-	inputs.property "version", project.version
+    inputs.property "version", project.version
 
-	filesMatching("fabric.mod.json") {
-		expand "version": project.version
-	}
+    filesMatching("fabric.mod.json") {
+        expand "version": project.version
+    }
 }
 
 tasks.withType(JavaCompile).configureEach {
-	it.options.release = 21
+    it.options.release = 21
 }
 
 java {
-	// Loom will automatically attach sourcesJar to a RemapSourcesJar task and to the "build" task
-	// if it is present.
-	// If you remove this line, sources will not be generated.
-	//withSourcesJar()
+    // Loom will automatically attach sourcesJar to a RemapSourcesJar task and to the "build" task
+    // if it is present.
+    // If you remove this line, sources will not be generated.
+    //withSourcesJar()
 
-	sourceCompatibility = JavaVersion.VERSION_21
-	targetCompatibility = JavaVersion.VERSION_21
+    sourceCompatibility = JavaVersion.VERSION_21
+    targetCompatibility = JavaVersion.VERSION_21
 }
 
 jar {
-	from("LICENSE") {
-		rename { "${it}_${project.base.archivesName.get()}"}
-	}
+    from("LICENSE") {
+        rename { "${it}_${project.base.archivesName.get()}" }
+    }
 
-	duplicatesStrategy = DuplicatesStrategy.EXCLUDE;
+    duplicatesStrategy = DuplicatesStrategy.EXCLUDE
 
-	String[] stuff = new String[] {
-		"discord4j-rest-3.3.0-RC1.jar",
-		"discord4j-gateway-3.3.0-RC1.jar",
-		"discord4j-voice-3.3.0-RC1.jar",
-		"discord4j-common-3.3.0-RC1.jar",
-		"discord4j-core-3.3.0-RC1.jar",
-		"reactor-extra-3.4.10.jar",
-		"reactor-core-3.4.30.jar",
-		"reactive-streams-1.0.4.jar",
-		"reactor-netty-http-1.0.33.jar",
-		"netty-codec-http2-4.1.93.Final.jar",
-		"reactor-netty-core-1.0.33.jar",
-		"netty-codec-http2-4.1.93.Final.jar",
-		"netty-handler-proxy-4.1.93.Final.jar",
-		"netty-codec-http-4.1.93.Final.jar",
-		"netty-resolver-dns-native-macos-4.1.93.Final-osx-x86_64.jar",
-		"netty-resolver-dns-classes-macos-4.1.93.Final.jar",
-		"netty-resolver-dns-4.1.93.Final.jar",
-		"netty-transport-native-epoll-4.1.97.Final-linux-x86_64.jar",
-		"netty-transport-native-epoll-4.1.97.Final-linux-aarch_64.jar",
-		"netty-handler-4.1.97.Final.jar",
-		"netty-codec-dns-4.1.93.Final.jar",
-		"netty-codec-socks-4.1.93.Final.jar",
-		"netty-codec-4.1.97.Final.jar",
-		"netty-transport-classes-epoll-4.1.97.Final.jar",
-		"netty-transport-native-unix-common-4.1.97.Final.jar",
-		"netty-transport-4.1.97.Final.jar",
-		"netty-buffer-4.1.97.Final.jar",
-		"netty-resolver-4.1.97.Final.jar",
-		"netty-common-4.1.97.Final.jar",
-		"jackson-datatype-jdk8-2.14.2.jar",
-		"jackson-databind-2.14.2.jar",
-		"jackson-annotations-2.14.2.jar",
-		"jackson-core-2.14.2.jar",
-		"jackson-datatype-jsr310-2.14.2.jar",
-		"discord-json-1.7.7.jar",
-		"discord-json-api-1.7.7.jar",
-		"caffeine-2.8.8.jar",
-	}
+    String[] stuff = new String[]{
+            "discord4j-rest-3.3.0-RC1.jar",
+            "discord4j-gateway-3.3.0-RC1.jar",
+            "discord4j-voice-3.3.0-RC1.jar",
+            "discord4j-common-3.3.0-RC1.jar",
+            "discord4j-core-3.3.0-RC1.jar",
+            "reactor-extra-3.4.10.jar",
+            "reactor-core-3.4.30.jar",
+            "reactive-streams-1.0.4.jar",
+            "reactor-netty-http-1.0.33.jar",
+            "netty-codec-http2-4.1.93.Final.jar",
+            "reactor-netty-core-1.0.33.jar",
+            "netty-codec-http2-4.1.93.Final.jar",
+            "netty-handler-proxy-4.1.93.Final.jar",
+            "netty-codec-http-4.1.93.Final.jar",
+            "netty-resolver-dns-native-macos-4.1.93.Final-osx-x86_64.jar",
+            "netty-resolver-dns-classes-macos-4.1.93.Final.jar",
+            "netty-resolver-dns-4.1.93.Final.jar",
+            "netty-transport-native-epoll-4.1.97.Final-linux-x86_64.jar",
+            "netty-transport-native-epoll-4.1.97.Final-linux-aarch_64.jar",
+            "netty-handler-4.1.97.Final.jar",
+            "netty-codec-dns-4.1.93.Final.jar",
+            "netty-codec-socks-4.1.93.Final.jar",
+            "netty-codec-4.1.97.Final.jar",
+            "netty-transport-classes-epoll-4.1.97.Final.jar",
+            "netty-transport-native-unix-common-4.1.97.Final.jar",
+            "netty-transport-4.1.97.Final.jar",
+            "netty-buffer-4.1.97.Final.jar",
+            "netty-resolver-4.1.97.Final.jar",
+            "netty-common-4.1.97.Final.jar",
+            "jackson-datatype-jdk8-2.14.2.jar",
+            "jackson-databind-2.14.2.jar",
+            "jackson-annotations-2.14.2.jar",
+            "jackson-core-2.14.2.jar",
+            "jackson-datatype-jsr310-2.14.2.jar",
+            "discord-json-1.7.7.jar",
+            "discord-json-api-1.7.7.jar",
+            "caffeine-2.8.8.jar",
+    }
 
-	from {
-		configurations.runtimeClasspath.collect {
-			 if(!stuff.contains(it.name)) return;
-			print(it.name + "\n")
-			it.isDirectory() ? it : zipTree(it)
-		}
-	}
+    from {
+        configurations.runtimeClasspath.collect {
+            if (!stuff.contains(it.name)) return it
+            print(it.name + "\n")
+            it.isDirectory() ? it : zipTree(it)
+        }
+    }
 }
 
 // configure the maven publication
 publishing {
-	publications {
-		create("mavenJava", MavenPublication) {
-			artifactId = project.archives_base_name
-			from components.java
-		}
-	}
+    publications {
+        create("mavenJava", MavenPublication) {
+            artifactId = project.archives_base_name
+            from components.java
+        }
+    }
 
-	// See https://docs.gradle.org/current/userguide/publishing_maven.html for information on how to set up publishing.
-	repositories {
-		// Add repositories to publish to here.
-		// Notice: This block does NOT have the same function as the block in the top level.
-		// The repositories here will be used for publishing your artifact, not for
-		// retrieving dependencies.
-	}
+    // See https://docs.gradle.org/current/userguide/publishing_maven.html for information on how to set up publishing.
+    repositories {
+        // Add repositories to publish to here.
+        // Notice: This block does NOT have the same function as the block in the top level.
+        // The repositories here will be used for publishing your artifact, not for
+        // retrieving dependencies.
+    }
 }
 
 //apply plugin: 'com.github.johnrengelman.shadow'

@@ -16,7 +16,7 @@
   "environment": "*",
   "entrypoints": {
     "main": [
-      "com.costin.ServerMain"
+      "com.costin.main.ServerMain"
     ]
   },
   "mixins": [

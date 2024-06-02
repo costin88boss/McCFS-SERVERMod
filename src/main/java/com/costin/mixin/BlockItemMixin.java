@@ -1,6 +1,6 @@
 package com.costin.mixin;
 
-import com.costin.ServerMain;
+import com.costin.main.Utils;
 import net.minecraft.block.BlockState;
 import net.minecraft.item.BlockItem;
 import net.minecraft.item.ItemPlacementContext;
@@ -16,7 +16,7 @@ public class BlockItemMixin {
     void place(ItemPlacementContext context, CallbackInfoReturnable<ActionResult> cir) {
         BlockState state = context.getWorld().getBlockState(context.getBlockPos());
         if (context.getPlayer() != null) {
-            ServerMain.getEventManager().onBlockPlace(state.getBlock().getName(), context.getPlayer().getName(), context.getBlockPos());
+            Utils.getEventManager().onBlockPlace(context.getPlayer().getEntityWorld().getDimensionEntry().getIdAsString().split(":")[1], state.getBlock().getName(), context.getPlayer().getName(), context.getBlockPos());
         }
     }
 }

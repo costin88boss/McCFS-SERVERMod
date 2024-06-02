@@ -8,12 +8,13 @@
   "client": [],
   "server": [
     "BlockItemMixin",
+    "CommandManagerMixin",
     "ConsoleLogMixin",
+    "DamageTrackerMixin",
     "ItemEntityMixin",
     "PlayerEntityMixin",
-    "DamageTrackerMixin",
     "ServerPlayerInteractionManagerMixin",
-    "CommandManagerMixin"
+    "WorldMixin"
   ],
   "injectors": {
     "defaultRequire": 1
